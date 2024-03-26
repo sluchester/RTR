@@ -3,9 +3,15 @@
  */
 package engtelecom.rtr;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
-        PCM30 quadro  = new PCM30(args[0]);
+        Pcm quadro = new Pcm();
+
+        Scanner entrada = new Scanner(System.in);
+
+        quadro.openFile(entrada);
 
         //receber um arquivo via linha de comando
 
