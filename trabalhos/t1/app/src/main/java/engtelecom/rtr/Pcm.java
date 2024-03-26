@@ -2,12 +2,12 @@ package engtelecom.rtr;
 
 import java.util.Scanner;
 
-public class PCM30 {
+public class PCM {
     private int paq[]= {0011011};
     private String arquivo;
 
     //constructor
-    PCM30(String arquivo){
+    PCM(){
         this.arquivo = arquivo;
         openFile(this.arquivo);
     }
@@ -17,6 +17,8 @@ public class PCM30 {
 
         while(entrada.hasNext()){
             String linha = entrada.nextLine();
+            System.out.println(linha);
+            break;
         }
     }
 
