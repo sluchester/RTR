@@ -12,6 +12,8 @@ public class App {
         Scanner entrada = new Scanner(System.in);
 
         quadro.openFile(entrada);
+//        quadro.testEE();
+        quadro.findPaq();
 
         //receber um arquivo via linha de comando
 
