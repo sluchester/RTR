@@ -12,14 +12,7 @@ public class App {
         Scanner entrada = new Scanner(System.in);
 
         quadro.openFile(entrada);
-//        quadro.testEE();
         quadro.findPaq();
 
-        //receber um arquivo via linha de comando
-
-        //ler o arquivo ate o final
-            //separar palavra por palavra
-        //encontrar o PAQ
-        //mostrar os dados alinhados na saida a partir do primeiro paq
     }
 }
