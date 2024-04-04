@@ -32,12 +32,31 @@ public class Pcm {
 
     public void findPaq(){
         for (int i = 0; i < formatString().length(); i++) {
-            String str = formatString().substring(i, i+8);
-            if(str.equals(paq)){
-                System.out.println("achou PAQ");
-            } else{
-                
+            String quadro = formatString().substring(i, i+255);
+            //boolean timeSlot = true;
+            int timeSlot = 0;
+
+            //se dois quadros a frente tiver paq, ele é verdadeiro
+
+            switch (timeSlot) {
+                case 0:    
+                break;
+
+                case 16:
+                break;
+
+                default:
+                    break;
             }
+            //comparo se a primeira palavra do timeslot é PAQ
+            if(timeSlot == true){
+                if (quadro.substring(0, 7).equals(paq)) {
+                    
+                }
+            } else{
+                //passar para o proximo quadro
+                i = i+255;
+            }    
 
             /*if((i+8) == formatString().length()){
                 break;
