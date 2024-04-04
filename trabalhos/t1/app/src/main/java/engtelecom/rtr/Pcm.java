@@ -1,4 +1,4 @@
-/* Dada a sequência de bits E1 recebida, fazer um programa para encontrar o alinhamento de quadro (PAQ) 
+/* Dada a sequência de bits E1 recebida, fazer um programa para encontrar o alinhamento de quadro (PAQ)
  * e mostrar na saída os bits alinhados. A saída deve apresentar todos os quadros alinhados a partir do
  * primeiro PAQ verdadeiro encontrado.
  */
@@ -32,44 +32,58 @@ public class Pcm {
 
     public void findPaq(){
         for (int i = 0; i < formatString().length(); i++) {
-            String quadro = formatString().substring(i, i+255);
-            //boolean timeSlot = true;
-            int timeSlot = 0;
+            String total = formatString();
+            int finalIndex = i+8;
+            System.out.println(finalIndex);
 
-            //se dois quadros a frente tiver paq, ele é verdadeiro
-
-            switch (timeSlot) {
-                case 0:    
-                break;
-
-                case 16:
-                break;
-
-                default:
-                    break;
-            }
-            //comparo se a primeira palavra do timeslot é PAQ
-            if(timeSlot == true){
-                if (quadro.substring(0, 7).equals(paq)) {
-                    
-                }
-            } else{
-                //passar para o proximo quadro
-                i = i+255;
-            }    
-
-            /*if((i+8) == formatString().length()){
+            if(finalIndex >= total.length()){
                 break;
             } else{
-                if (str.equals(paq)) {
-                    System.out.println("Encontrou PAQ na posição " + i);
-                    if(str.charAt(1) == '1'){
-                        System.out.println("bit b2 setado em 1");
+                String quadro = total.substring(i, finalIndex);
+                System.out.println("lendo string quadro " + quadro);
+
+                if(quadro.equals("10011011")){
+                    System.out.println("PAQ " + quadro + " na posição " + i);
+                    String confirmacaoAlinhamento = total.substring(i+263,i+271);
+                    if(confirmacaoAlinhamento.charAt(1) == '1'){
+                        //achei a confirmação de que o PAQ anterior era verdadeiro
+                        //tenho que pegar a posição dele e fazer contar a partir dali
+                        System.out.println("PAQ verdadeiro");
+                        int posPAQ = quadro.indexOf(quadro);
+                        showAfterPaq(posPAQ);break;
+                    } else{
+                        System.out.println("achou PAQ, mas não confirmou se é verdadeiro");
                     }
-                } else{
-
                 }
-            }*/
+            }
+            //se dois quadros a frente tiver paq, ele é verdadeiro
+        }
+    }
+
+    private void showAfterPaq(int posPaq){
+        int timeSlot = 0;
+        int quadro = 0;
+
+        for (int i = posPaq; i < formatString().length(); i++) {
+            String total = formatString();
+            int finalIndex = i+8;
+
+            if(timeSlot > 32){
+                System.out.println("------------------------------------");
+                System.out.println("QUADRO " + quadro);
+                System.out.println("------------------------------------");
+                timeSlot = 0;
+                quadro += 1;
+            } else{
+                System.out.println("------------------------------------");
+                System.out.println("Timeslot " + timeSlot);
+                String palavra = total.substring(i, finalIndex);
+                System.out.println(palavra);
+                System.out.println("------------------------------------");
+                timeSlot+=1;
+            }
+
+            i = finalIndex + 1;
         }
     }
 }
