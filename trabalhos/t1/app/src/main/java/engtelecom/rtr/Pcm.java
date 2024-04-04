@@ -1,3 +1,8 @@
+/* Dada a sequência de bits E1 recebida, fazer um programa para encontrar o alinhamento de quadro (PAQ) 
+ * e mostrar na saída os bits alinhados. A saída deve apresentar todos os quadros alinhados a partir do
+ * primeiro PAQ verdadeiro encontrado.
+ */
+
 package engtelecom.rtr;
 
 import java.util.Arrays;
@@ -22,23 +27,30 @@ public class Pcm {
                 formattedString += '1';
             }
         }
-//        System.out.println("O arquivo contém " + formattedString.length() + " números binários");
         return formattedString;
     }
 
     public void findPaq(){
         for (int i = 0; i < formatString().length(); i++) {
             String str = formatString().substring(i, i+8);
-            if((i+8) == formatString().length()){
+            if(str.equals(paq)){
+                System.out.println("achou PAQ");
+            } else{
+                
+            }
+
+            /*if((i+8) == formatString().length()){
                 break;
             } else{
                 if (str.equals(paq)) {
                     System.out.println("Encontrou PAQ na posição " + i);
-                    if(str.charAt(2) == '1'){
+                    if(str.charAt(1) == '1'){
                         System.out.println("bit b2 setado em 1");
                     }
+                } else{
+
                 }
-            }
+            }*/
         }
     }
 }
