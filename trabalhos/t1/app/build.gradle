@@ -25,6 +25,12 @@ dependencies {
     implementation libs.guava
 }
 
+jar{
+    manifest{
+        attributes "Main-Class": "engtelecom.rtr.App"
+    }
+}
+
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
