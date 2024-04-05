@@ -34,13 +34,13 @@ public class Pcm {
         for (int i = 0; i < formatString().length(); i++) {
             String total = formatString();
             int finalIndex = i+8;
-            System.out.println(finalIndex);
+            //System.out.println(finalIndex);
 
             if(finalIndex >= total.length()){
                 break;
             } else{
                 String quadro = total.substring(i, finalIndex);
-                System.out.println("lendo string quadro " + quadro);
+                System.out.println("lendo sequencia de bits " + quadro);
 
                 if(quadro.equals("10011011")){
                     System.out.println("PAQ " + quadro + " na posição " + i);
@@ -56,7 +56,6 @@ public class Pcm {
                     }
                 }
             }
-            //se dois quadros a frente tiver paq, ele é verdadeiro
         }
     }
 
