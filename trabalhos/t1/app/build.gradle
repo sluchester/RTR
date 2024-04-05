@@ -36,11 +36,13 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
+
+    withSourcesJar()
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'engtelecom.rtr.App'
+    mainClass.set('engtelecom.rtr.App')
 }
 
 run{
