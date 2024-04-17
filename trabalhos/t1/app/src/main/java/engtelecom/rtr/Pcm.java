@@ -3,6 +3,15 @@
  * primeiro PAQ verdadeiro encontrado.
  */
 
+/**
+ * PARTE 2
+ *  A partir dos quadros alinhados localizar o sincronismo de Multiquadro (PAMQ) e
+ *  extrair os bits de sinalização de todos os canais de voz.
+ *  b0, b1 e b4, b5 do TS16 de todos os quadros do multiquadro.
+ *
+ * PAMQ = 000XXXX
+ */
+
 package engtelecom.rtr;
 
 import java.util.Arrays;
@@ -62,10 +71,15 @@ public class Pcm {
     private void showAfterPaq(int posPaq){
         int timeSlot = 0;
         int quadro = 0;
+        boolean signal = false;
 
         for (int i = posPaq; i < formatString().length(); i++) {
             String total = formatString();
             int finalIndex = i+8;
+
+            if(quadro == 0 && timeSlot == 16){
+                String palavra = total.substring(i, finalIndex);
+            }
 
             if(timeSlot > 32){
                 System.out.println("------------------------------------");
@@ -73,7 +87,12 @@ public class Pcm {
                 System.out.println("------------------------------------");
                 timeSlot = 0;
                 quadro += 1;
-            } else{
+            } /*else if(quadro == 0 && timeSlot == 16){
+                System.out.println("PAMQ");
+                String palavra = total.substring(i, finalIndex);
+                System.out.println(palavra);
+                break;
+            }*/ else{
                 System.out.println("------------------------------------");
                 System.out.println("Timeslot " + timeSlot);
                 String palavra = total.substring(i, finalIndex);
@@ -81,7 +100,6 @@ public class Pcm {
                 System.out.println("------------------------------------");
                 timeSlot+=1;
             }
-
             i = finalIndex + 1;
         }
     }
