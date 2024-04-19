@@ -7,12 +7,10 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        Pcm quadro = new Pcm();
-
         Scanner entrada = new Scanner(System.in);
+        Arquivo arquivo = new Arquivo(entrada);
 
-        quadro.openFile(entrada);
-        quadro.findPaq();
-
+        Pcm pcm = new Pcm(arquivo.formatString());
+        pcm.runAll();
     }
 }
