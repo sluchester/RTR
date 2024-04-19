@@ -19,41 +19,37 @@ import java.util.Scanner;
 
 public class Pcm {
     private String paq = "10011011";
-    private String arquivo;
+    private String formattedString;
 
-    public void openFile(Scanner entrada){
-        while(entrada.hasNextLine()) {
-            arquivo += entrada.nextLine();
-        }
+    public Pcm(String formattedString) {
+        this.formattedString = formattedString;
     }
 
-    private String formatString(){
-        String formattedString = "";
-        for (int c = 0; c < arquivo.length(); c++){
-            if (arquivo.charAt(c) == '0'){
-                formattedString += '0';
-            } else if (arquivo.charAt(c) == '1'){
-                formattedString += '1';
-            }
+    public void runAll(){
+        //String palavra = "";
+        for (int i = 0; i < formattedString.length(); i++) {
+            String palavra = formattedString.substring(i,i+7);
+            System.out.println("chegou em runall " + palavra);
         }
-        return formattedString;
+        //System.out.println("saiu do runall");
     }
 
+/*
     public void findPaq(){
-        for (int i = 0; i < formatString().length(); i++) {
-            String total = formatString();
+        for (int i = 0; i < formattedString.length(); i++) {
+
             int finalIndex = i+8;
             //System.out.println(finalIndex);
 
-            if(finalIndex >= total.length()){
+            if(finalIndex >= formattedString.length()){
                 break;
             } else{
-                String quadro = total.substring(i, finalIndex);
+                String quadro = formattedString.substring(i, finalIndex);
                 System.out.println("lendo sequencia de bits " + quadro);
 
                 if(quadro.equals("10011011")){
                     System.out.println("PAQ " + quadro + " na posição " + i);
-                    String confirmacaoAlinhamento = total.substring(i+263,i+271);
+                    String confirmacaoAlinhamento = formattedString.substring(i+263,i+271);
                     if(confirmacaoAlinhamento.charAt(1) == '1'){
                         //achei a confirmação de que o PAQ anterior era verdadeiro
                         //tenho que pegar a posição dele e fazer contar a partir dali
@@ -73,7 +69,7 @@ public class Pcm {
         int quadro = 0;
         boolean signal = false;
 
-        for (int i = posPaq; i < formatString().length(); i++) {
+        for (int i = posPaq; i < formattedString().length(); i++) {
             String total = formatString();
             int finalIndex = i+8;
 
@@ -92,7 +88,7 @@ public class Pcm {
                 String palavra = total.substring(i, finalIndex);
                 System.out.println(palavra);
                 break;
-            }*/ else{
+            }*/ /*else{
                 System.out.println("------------------------------------");
                 System.out.println("Timeslot " + timeSlot);
                 String palavra = total.substring(i, finalIndex);
@@ -102,5 +98,5 @@ public class Pcm {
             }
             i = finalIndex + 1;
         }
-    }
+    }*/
 }
