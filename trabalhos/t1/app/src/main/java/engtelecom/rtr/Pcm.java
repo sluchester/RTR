@@ -8,95 +8,87 @@
  *  A partir dos quadros alinhados localizar o sincronismo de Multiquadro (PAMQ) e
  *  extrair os bits de sinalização de todos os canais de voz.
  *  b0, b1 e b4, b5 do TS16 de todos os quadros do multiquadro.
- *
- * PAMQ = 000XXXX
+ * PAMQ = 0000XXXX
  */
 
 package engtelecom.rtr;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Pcm {
     private String paq = "10011011";
     private String formattedString;
 
+    private final int BIT_FINAL = 8;
+
     public Pcm(String formattedString) {
         this.formattedString = formattedString;
     }
 
-    public void runAll(){
-        //String palavra = "";
-        for (int i = 0; i < formattedString.length(); i++) {
-            String palavra = formattedString.substring(i,i+7);
-            System.out.println("chegou em runall " + palavra);
+    private boolean confirmPAQ(int posInicial){
+        posInicial+=256;
+        int posFinal = posInicial + 256 + BIT_FINAL;
+
+        System.out.println("PASSOU PARA VALIDAR O PAQ");
+
+        String palavra = formattedString.substring(posInicial,posFinal);
+        if(palavra.charAt(1) == '1'){
+            return true;
+        } else{
+            return false;
         }
-        //System.out.println("saiu do runall");
     }
 
-/*
-    public void findPaq(){
-        for (int i = 0; i < formattedString.length(); i++) {
-
-            int finalIndex = i+8;
-            //System.out.println(finalIndex);
-
-            if(finalIndex >= formattedString.length()){
-                break;
+    public boolean findPAQ(String palavra, int posInicial){
+        if(palavra.equals(paq)){
+            if(confirmPAQ(posInicial)){
+                return true;
             } else{
-                String quadro = formattedString.substring(i, finalIndex);
-                System.out.println("lendo sequencia de bits " + quadro);
+                return false;
+            }
+        } else{
+            return false;
+        }
+    }
 
-                if(quadro.equals("10011011")){
-                    System.out.println("PAQ " + quadro + " na posição " + i);
-                    String confirmacaoAlinhamento = formattedString.substring(i+263,i+271);
-                    if(confirmacaoAlinhamento.charAt(1) == '1'){
-                        //achei a confirmação de que o PAQ anterior era verdadeiro
-                        //tenho que pegar a posição dele e fazer contar a partir dali
-                        System.out.println("PAQ verdadeiro");
-                        int posPAQ = quadro.indexOf(quadro);
-                        showAfterPaq(posPAQ);break;
-                    } else{
-                        System.out.println("achou PAQ, mas não confirmou se é verdadeiro");
-                    }
+    public void runAll(){
+        for (int i = 0; i < formattedString.length(); i++) {
+            try{
+                String palavra = formattedString.substring(i,i+BIT_FINAL);
+                //System.out.println(palavra);
+                if(findPAQ(palavra, i)){
+                    System.out.println("achou paq verdadeiro" + palavra + " na posição " + i);
+                    alignment(i);
                 }
+            } catch (Exception e){
+                System.out.println("chegou ao fim");
+                break;
             }
         }
     }
 
-    private void showAfterPaq(int posPaq){
-        int timeSlot = 0;
-        int quadro = 0;
-        boolean signal = false;
+    public void alignment(int posInicial){
+        HashMap<Integer, String> timeslotTable =  new HashMap<Integer, String>();
+        int key = 0;
 
-        for (int i = posPaq; i < formattedString().length(); i++) {
-            String total = formatString();
-            int finalIndex = i+8;
+        for (int i = posInicial; i < formattedString.length(); i++) {
+            String palavra = formattedString.substring(i,i+BIT_FINAL);
 
-            if(quadro == 0 && timeSlot == 16){
-                String palavra = total.substring(i, finalIndex);
+            //a chava é o número dos timeslots
+            if(key == 33){
+                key= 0;
+            } else{
+                //TODO
+                //tem que verificar se ele não vai sobreescrever a chave e o valor da tabela
+                //falta validar isso aqui
+                timeslotTable.put(key,palavra);
+                key+=1;
             }
 
-            if(timeSlot > 32){
-                System.out.println("------------------------------------");
-                System.out.println("QUADRO " + quadro);
-                System.out.println("------------------------------------");
-                timeSlot = 0;
-                quadro += 1;
-            } /*else if(quadro == 0 && timeSlot == 16){
-                System.out.println("PAMQ");
-                String palavra = total.substring(i, finalIndex);
-                System.out.println(palavra);
-                break;
-            }*/ /*else{
-                System.out.println("------------------------------------");
-                System.out.println("Timeslot " + timeSlot);
-                String palavra = total.substring(i, finalIndex);
-                System.out.println(palavra);
-                System.out.println("------------------------------------");
-                timeSlot+=1;
-            }
-            i = finalIndex + 1;
+            //avança para pegar a próxima palavra
+            i+=9;
         }
-    }*/
+    }
 }
