@@ -20,8 +20,7 @@ import java.util.Scanner;
 public class Pcm {
     private String paq = "10011011";
     private String formattedString;
-    //private Timeslot timeslot;
-    //private Quadro quadro;
+    private Integer posPAMQ;
 
     private final int BIT_FINAL = 8;
 
@@ -65,6 +64,9 @@ public class Pcm {
 
     public int findPAMQ(int posInicial){
         int posFinal = 0;
+        //logica ta ERRADA
+         //somar a posição do paq com + 128 bits. Se não achar, tem que se somar 256 bits para ver se acha
+         //e assim ficar indo até achar
 
         do{
             posInicial += 128;
@@ -75,7 +77,7 @@ public class Pcm {
     }
 
     public void runTillPAQ() {
-        System.out.println(formattedString.length());
+        //System.out.println(formattedString.length());
         for (int i = 0; i < formattedString.length(); i++) {
             try {
                 String palavra = formattedString.substring(i, i + BIT_FINAL);
@@ -83,8 +85,9 @@ public class Pcm {
                 if (findPAQ(palavra, i)) {
                     //a partir do primeiro paq verdadeiro, descarta os bits anteriores e
                     System.out.println("achou paq verdadeiro " + palavra + " na posição " + i);
-                    //formattedString = formattedString.substring(i);
-                    int k = findPAMQ(i);
+
+                    posPAMQ = findPAMQ(i);
+                    System.out.println("pamq na posição " + posPAMQ);
                     //System.out.println(formattedString.length());
                 }
             } catch (Exception e) {
@@ -92,6 +95,7 @@ public class Pcm {
                 break;
             }
         }
+        //formattedString = formattedString.substring(posPAMQ);
     }
 
     public void printTimeslot(String palavra, int contTimeslot){
