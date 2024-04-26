@@ -21,7 +21,7 @@ public class Arquivo {
 
     public String formatString(){
         String totalDeCaracteres = openFile();
-        System.out.println("total de caracteres antes" + totalDeCaracteres.length());
+        //System.out.println("total de caracteres antes" + totalDeCaracteres.length());
 
         for (int c = 0; c < totalDeCaracteres.length(); c++){
             if (totalDeCaracteres.charAt(c) == '0'){
