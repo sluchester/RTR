@@ -20,6 +20,8 @@ import java.util.Scanner;
 public class Pcm {
     private String paq = "10011011";
     private String formattedString;
+    //private Timeslot timeslot;
+    //private Quadro quadro;
 
     private final int BIT_FINAL = 8;
 
@@ -27,49 +29,150 @@ public class Pcm {
         this.formattedString = formattedString;
     }
 
-    private boolean confirmPAQ(int posInicial){
-        posInicial+=256;
-        int posFinal = posInicial + 256 + BIT_FINAL;
+    private boolean confirmPAQ(int posInicial) {
+        posInicial += 256;
+        //int posFinal = posInicial + 256 + BIT_FINAL;
+        int posFinal = posInicial + BIT_FINAL;
 
-        System.out.println("PASSOU PARA VALIDAR O PAQ");
+        //System.out.println("PASSOU PARA VALIDAR O PAQ");
 
-        String palavra = formattedString.substring(posInicial,posFinal);
-        if(palavra.charAt(1) == '1'){
-            return true;
-        } else{
-            return false;
-        }
-    }
-
-    public boolean findPAQ(String palavra, int posInicial){
-        if(palavra.equals(paq)){
-            if(confirmPAQ(posInicial)){
+        String palavra = formattedString.substring(posInicial, posFinal);
+        if (palavra.charAt(1) == '1') {
+            posInicial += 256;
+            posFinal = posInicial + BIT_FINAL;
+            palavra = formattedString.substring(posInicial, posFinal);
+            if(palavra.equals(paq)){
                 return true;
             } else{
                 return false;
             }
-        } else{
+        } else {
             return false;
         }
     }
 
-    public void runAll(){
+    public boolean findPAQ(String palavra, int posInicial) {
+        if (palavra.equals(paq)) {
+            if (confirmPAQ(posInicial)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public int findPAMQ(int posInicial){
+        int posFinal = 0;
+
+        do{
+            posInicial += 128;
+            posFinal = posInicial + BIT_FINAL;
+        }while (!formattedString.substring(posInicial, posFinal).startsWith("0000"));
+
+        return posInicial;
+    }
+
+    public void runTillPAQ() {
+        System.out.println(formattedString.length());
         for (int i = 0; i < formattedString.length(); i++) {
-            try{
-                String palavra = formattedString.substring(i,i+BIT_FINAL);
+            try {
+                String palavra = formattedString.substring(i, i + BIT_FINAL);
                 //System.out.println(palavra);
-                if(findPAQ(palavra, i)){
-                    System.out.println("achou paq verdadeiro" + palavra + " na posição " + i);
-                    alignment(i);
+                if (findPAQ(palavra, i)) {
+                    //a partir do primeiro paq verdadeiro, descarta os bits anteriores e
+                    System.out.println("achou paq verdadeiro " + palavra + " na posição " + i);
+                    //formattedString = formattedString.substring(i);
+                    int k = findPAMQ(i);
+                    //System.out.println(formattedString.length());
                 }
-            } catch (Exception e){
-                System.out.println("chegou ao fim");
+            } catch (Exception e) {
+                System.out.println("chegou ao fim da sequência de bits");
                 break;
             }
         }
     }
 
-    public void alignment(int posInicial){
+    public void printTimeslot(String palavra, int contTimeslot){
+        System.out.println("---Timeslot " + contTimeslot + "---");
+        System.out.println("    " + palavra + " ");
+        System.out.println("----------------");
+    }
+
+    public void printQuadro(int contQuadro){
+        System.out.println("***************");
+        System.out.println("***QUADRO " + contQuadro + "***");
+        System.out.println("***************");
+    }
+
+    public void findPAMQ() {
+        int contTimeslot = 0;
+        int contQuadro = 0;
+        System.out.println(formattedString.length());
+
+        printQuadro(contQuadro);
+
+        for (int i = 0; i < formattedString.length(); i++) {
+            String palavra = formattedString.substring(i, i + BIT_FINAL);
+
+            if (contTimeslot < 32) {
+                if ((contQuadro == 0) && (contTimeslot == 16)) {
+                    System.out.println("PAMQ " + palavra);
+                    if (palavra.startsWith("0000")) {
+                        System.out.println(palavra);
+                        System.out.println("PAMQ achado " + " b4 = " + palavra.charAt(4) + " b5 = " + palavra.charAt(5));
+                        System.out.println("------------------");
+                    }
+                    //canal de alinhamento
+                } else if (contTimeslot == 0) {
+                    printTimeslot(palavra,contTimeslot);
+                    //canal de sinalização
+                } else if (contTimeslot == 16) {
+                    printTimeslot(palavra,contTimeslot);
+                } else {
+                    System.out.println("---Timeslot " + contTimeslot + "---");
+                    System.out.println("   b0= " + palavra.charAt(0) + " b1= " + palavra.charAt(1));
+                    System.out.println("----------------");
+                }
+                contTimeslot += 1;
+            } else {
+                if(contQuadro == 16){
+                    contQuadro = 0;
+                    contTimeslot = 0;
+                    printQuadro(contQuadro);
+                } else{
+                    contQuadro += 1;
+                    contTimeslot = 0;
+                    printQuadro(contQuadro);
+                }
+            }
+
+            //avança para pegar a próxima palavra
+            i += 9;
+        }
+    }
+}
+    /*public void pamq(){
+        int contTimeslot = 0;
+        int contQuadro = 0;
+
+        for (int i = 0; i < formattedString.length(); i++) {
+            Timeslot timeslot = new Timeslot(formattedString.substring(i, i + BIT_FINAL));
+            if(contTimeslot < 33){
+                timeslot.addTimeslot(contTimeslot);
+                contTimeslot+=1;
+            } else{
+                quadro.addQuadro();
+                contQuadro+=1;
+                contTimeslot=0;
+            }
+            //avança para pegar a próxima palavra
+            i+=9;
+        }
+    }
+
+    /*public void alignment(int posInicial){
         HashMap<Integer, String> timeslotTable =  new HashMap<Integer, String>();
         int key = 0;
 
@@ -80,7 +183,6 @@ public class Pcm {
             if(key == 33){
                 key= 0;
             } else{
-                //TODO
                 //tem que verificar se ele não vai sobreescrever a chave e o valor da tabela
                 //falta validar isso aqui
                 timeslotTable.put(key,palavra);
@@ -90,5 +192,4 @@ public class Pcm {
             //avança para pegar a próxima palavra
             i+=9;
         }
-    }
-}
+    }*/

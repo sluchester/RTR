@@ -11,6 +11,7 @@ public class App {
         Arquivo arquivo = new Arquivo(entrada);
 
         Pcm pcm = new Pcm(arquivo.formatString());
-        pcm.runAll();
+        pcm.runTillPAQ();
+//        pcm.findPAMQ();
     }
 }
