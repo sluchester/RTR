@@ -63,17 +63,24 @@ public class Pcm {
     }
 
     public int findPAMQ(int posInicial){
-        int posFinal = 0;
+        posInicial += 128;
+        int posFinal = posInicial + 8;
         //logica ta ERRADA
          //somar a posição do paq com + 128 bits. Se não achar, tem que se somar 256 bits para ver se acha
          //e assim ficar indo até achar
+        boolean flag = true;
 
-        do{
-            posInicial += 128;
-            posFinal = posInicial + BIT_FINAL;
-        }while (!formattedString.substring(posInicial, posFinal).startsWith("0000"));
-
-        return posInicial;
+         while(flag){
+            String palavra = formattedString.substring(posInicial,posFinal);
+            if(palavra.startsWith("0000"){
+                posInicial += 4096;
+                palavra = formattedString.substring();
+            })else{
+                posInicial += 256;
+                posFinal = posInicial + 8;
+            }
+         }
+         
     }
 
     public void runTillPAQ() {
@@ -157,43 +164,3 @@ public class Pcm {
         }
     }
 }
-    /*public void pamq(){
-        int contTimeslot = 0;
-        int contQuadro = 0;
-
-        for (int i = 0; i < formattedString.length(); i++) {
-            Timeslot timeslot = new Timeslot(formattedString.substring(i, i + BIT_FINAL));
-            if(contTimeslot < 33){
-                timeslot.addTimeslot(contTimeslot);
-                contTimeslot+=1;
-            } else{
-                quadro.addQuadro();
-                contQuadro+=1;
-                contTimeslot=0;
-            }
-            //avança para pegar a próxima palavra
-            i+=9;
-        }
-    }
-
-    /*public void alignment(int posInicial){
-        HashMap<Integer, String> timeslotTable =  new HashMap<Integer, String>();
-        int key = 0;
-
-        for (int i = posInicial; i < formattedString.length(); i++) {
-            String palavra = formattedString.substring(i,i+BIT_FINAL);
-
-            //a chava é o número dos timeslots
-            if(key == 33){
-                key= 0;
-            } else{
-                //tem que verificar se ele não vai sobreescrever a chave e o valor da tabela
-                //falta validar isso aqui
-                timeslotTable.put(key,palavra);
-                key+=1;
-            }
-
-            //avança para pegar a próxima palavra
-            i+=9;
-        }
-    }*/
