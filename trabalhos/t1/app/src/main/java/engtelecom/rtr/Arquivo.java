@@ -11,6 +11,7 @@ public class Arquivo {
         this.arquivo = arquivo;
     }
 
+    //abre o arquivo e coloca tudo dentro de uma string
     private String openFile(){
         String total = "";
         while(arquivo.hasNextLine()) {
@@ -19,6 +20,7 @@ public class Arquivo {
         return total;
     }
 
+    //tendo a string lida, separa os bits dos caracteres que não serão necessários
     public String formatString(){
         String totalDeCaracteres = openFile();
         //System.out.println("total de caracteres antes" + totalDeCaracteres.length());
