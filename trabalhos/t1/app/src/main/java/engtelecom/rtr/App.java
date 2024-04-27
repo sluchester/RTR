@@ -12,6 +12,6 @@ public class App {
 
         Pcm pcm = new Pcm(arquivo.formatString());
         pcm.runTillPAQ();
-//        pcm.findPAMQ();
+        pcm.findPAMQ();
     }
 }
